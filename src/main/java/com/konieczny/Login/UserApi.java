@@ -65,7 +65,7 @@ public String register(final Model model){
             return "registration";
         }
 
-        return "/starter";
+        return "/login";
     }
 }
 
