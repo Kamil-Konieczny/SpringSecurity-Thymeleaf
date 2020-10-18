@@ -1,8 +1,10 @@
 package com.konieczny.Login;
 
 
+import com.konieczny.Login.security.registrationDataChecking;
+import com.konieczny.Login.usersDB.Manager;
 import com.konieczny.Login.usersDB.Repository;
-import com.konieczny.Login.models.User;
+import com.konieczny.Login.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,22 +19,27 @@ import javax.validation.Valid;
 public class UserApi {
     @Autowired
     Repository userRepository;
+    @Autowired
+    Manager userManager;
 
-
-    @GetMapping("/")
-    public String home() {
-        return ("<h1>Welcome</h1>");
+    public UserApi(Manager userManager) {
+        super();
+        this.userManager = userManager;
     }
 
     @GetMapping("/user")
-    public String user(Model model) {
+    public String user(final Model model)
+    {
+        System.out.println(model.getAttribute("email"));
         model.addAttribute("name","User");
         return "mainPage";
     }
 
     @GetMapping("/login")
-    public String login()
-    { return "login"; }
+    public String login(final Model model)
+    {
+        return "login";
+    }
 
     @GetMapping("/admin")
     public String admin(Model model) {
@@ -54,18 +61,18 @@ public class UserApi {
 //    }
 @GetMapping("/registration")
 public String register(final Model model){
-    model.addAttribute("user", new User());
+    model.addAttribute("user", new registrationDataChecking());
     return "registration";
 }
 
     @PostMapping("/registration")
-    public String userRegistration(final @Valid User user, final BindingResult bindingResult, final Model model){
+    public String userRegistration( @Valid final User user, final BindingResult bindingResult, final Model model){
         if(bindingResult.hasErrors()){
             model.addAttribute("registrationForm", user);
             return "registration";
         }
-
-        return "/login";
+        userManager.register(user);
+        return "redirect:/registration?success";
     }
 }
 

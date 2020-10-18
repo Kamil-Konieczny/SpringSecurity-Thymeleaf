@@ -1,10 +1,10 @@
-package com.konieczny.Login.models;
+package com.konieczny.Login.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -12,23 +12,21 @@ import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
-    private String userName;
+    private String firstname;
+    private String lastname;
     private String user_password;
     private boolean active;
     private List<GrantedAuthority> authorities ;
     private String email;
     public MyUserDetails(User user) {
-        this.userName = user.getUserName();
+        this.firstname = user.getFirstName();
+        this.lastname = user.getLastName();
         this.user_password = user.getUser_password();
-        this.active = user.isActive();
-        this.authorities = Arrays.stream(user.getRoles().split(","))
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-        this.email = user.getUser_email();
-    }
-
-    public String getEmail() {
-        return email;
+        this.active = user.isUser_active();
+        this.authorities = Arrays.stream(user.getUsers_role().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        this.email = user.getEmail();
     }
 
     @Override
@@ -43,7 +41,23 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return null;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     @Override
@@ -66,13 +80,4 @@ public class MyUserDetails implements UserDetails {
         return active;
     }
 
-    @Override
-    public String toString() {
-        return "MyUserDetails{" +
-                "userName='" + userName + '\'' +
-                ", password='" + user_password + '\'' +
-                ", active=" + active +
-                ", authorities=" + authorities +
-                '}';
-    }
 }
