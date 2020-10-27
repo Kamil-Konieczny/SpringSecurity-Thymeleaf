@@ -1,26 +1,24 @@
 package com.konieczny.Login.usersDB;
 
-import com.konieczny.Login.entities.MyUserDetails;
-import com.konieczny.Login.entities.User;
-import com.konieczny.Login.security.registrationDataChecking;
-import org.springframework.beans.BeanUtils;
+import com.konieczny.Login.UserEntities.MyUserDetails;
+import com.konieczny.Login.UserEntities.User;
+import com.konieczny.Login.profileDB.ProfileService;
+import com.konieczny.Login.profileEntity.ProfileEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
-import java.net.UnknownServiceException;
-import java.util.Arrays;
-import java.util.Optional;
 
 @Service("userService")
 public class Manager implements UserDetailsService {
 
+
+    @Autowired
+    private ProfileService profileService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -40,15 +38,14 @@ public class Manager implements UserDetailsService {
     }
 
     public void register(@Valid User user) {
-
         User userEntity = new User();
         userEntity.setEmail(user.getEmail());
         userEntity.setFirstName(user.getFirstName());
         userEntity.setLastName(user.getLastName());
         userEntity.setUser_password(passwordEncoder.encode(user.getUser_password()));
+        ProfileEntity profileEntity = new ProfileEntity();
+        profileService.create(profileEntity);
+        userEntity.setProfileEntity(profileEntity);
         userRepository.save(userEntity);
     }
-
-
-
 }

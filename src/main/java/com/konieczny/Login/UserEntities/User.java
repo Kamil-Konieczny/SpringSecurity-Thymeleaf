@@ -1,20 +1,22 @@
-package com.konieczny.Login.entities;
+package com.konieczny.Login.UserEntities;
+
+import com.konieczny.Login.profileEntity.ProfileEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int user_id;
     @Column
-    @NotEmpty(message = "Username can not be empty")
+    @NotEmpty(message = "First name can not be empty")
     private String firstName;
     @Column
-    @NotEmpty(message = "Username can not be empty")
+    @NotEmpty(message = "Last name can not be empty")
     private String lastName;
     @Column
     @NotEmpty(message = "Password can not be empty")
@@ -26,6 +28,8 @@ public class User implements Serializable {
     @Column
     @NotEmpty(message = "Email can not be empty")
     private  String email;
+
+
     public User() {
     }
 
@@ -89,4 +93,28 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id")
+    private ProfileEntity profileEntity;
+
+    public ProfileEntity getProfileEntity() {
+        return profileEntity;
+    }
+
+    public void setProfileEntity(ProfileEntity profileEntity) {
+        this.profileEntity = profileEntity;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id=" + user_id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", user_password='" + user_password + '\'' +
+                ", user_active=" + user_active +
+                ", users_role='" + users_role + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

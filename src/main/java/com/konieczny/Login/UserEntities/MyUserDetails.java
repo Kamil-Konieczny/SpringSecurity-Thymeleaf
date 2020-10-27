@@ -1,10 +1,13 @@
-package com.konieczny.Login.entities;
+package com.konieczny.Login.UserEntities;
 
+import com.konieczny.Login.profileEntity.ProfileEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +21,7 @@ public class MyUserDetails implements UserDetails {
     private boolean active;
     private List<GrantedAuthority> authorities ;
     private String email;
+    private User user;
     public MyUserDetails(User user) {
         this.firstname = user.getFirstName();
         this.lastname = user.getLastName();
@@ -27,6 +31,15 @@ public class MyUserDetails implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         this.email = user.getEmail();
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -79,5 +92,6 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
 
 }

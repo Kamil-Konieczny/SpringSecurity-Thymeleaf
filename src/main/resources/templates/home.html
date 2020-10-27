@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-spring-security3">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Registration and Login App</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link href = "css/bootstrap.css" rel = "stylesheet"/>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:#347ab6;">
+    <div class="container-fluid">
+        <div class="navbar-header" >
+            <a class="navbar-brand" href="#" th:href="@{/}" style="color:white;">
+
+                <span th:text="${#authentication.getPrincipal().getFirstname()}"></span>
+                <span th:text="${#authentication.getPrincipal().getLastname()}"></span>
+            </a>
+        </div>
+        <div id="navbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li style="font-size:20px" sec:authorize="isAuthenticated()"><a th:href="@{/logout}" class="glyphicon glyphicon-log-in"style="color:white;"> Logout</a></li>
+            </ul>
+        </div>
+        </span>
+    </div>
+</nav>
+
+<br>
+<br>
+<form  th:action = "@{/home}" th:object="${profileEntity}" method="post" enctype="multipart/form-data">
+<div style="padding-left: 10%; padding-top: 3%;position: absolute;">
+            <img alt="" th:src="@{'data:image/jpeg;base64,'+${photo}}"    style="width: 300px;height: 350px; ">
+
+
+</div>
+    <div class="form-group" style="padding-left: 35%;padding-top:5%;position: absolute;">
+        <label style="font-size:30px">Your profile</label><br>
+        <label style="font-size:14px">Nickname: </label>
+        <label style="font-size:20px" th:text = "${currentProfile.nickname}"></label><br>
+        <label style="font-size:14px">About me: </label>
+        <label style="font-size:20px" th:text = "${currentProfile.aboutMe}"></label><br>
+        <label style="font-size:14px">Birthday: </label>
+        <label style="font-size:20px" th:text = "${currentProfile.birthday}"></label>
+    </div>
+    <div style=" position: static; float: right;padding-top:5%;">
+        <label style="font-size:20px">Update profile</label><br>
+        <div class="form-group" >
+            <label style="margin-top:5%;">Nickname:</label><br>
+            <input type="text" name = "nickname" id = "nickname"  class="form-control" style="width: 300px; height:50px;font-size:20px;border-style: none;background-color:#e6e6e6;border-radius: 25px;display:flex;"><br>
+        </div>
+        <div class="form-group">
+            <label style="margin-top:5%;">Something about You:</label><br>
+            <textarea id="aboutMe" name = "aboutMe"  rows="5" cols="70" style="border-style: none;background-color:#e6e6e6;border-radius: 25px;"></textarea><br>
+        </div>
+        <div class="form-group">
+            <label for="birthday" style="margin-top:5%;">Birthday:</label><br>
+            <input type="date" id="birthday"  name="birthday"  style="border-style: none;background-color:#e6e6e6;border-radius: 25px;width: 300px; height:50px;font-size:16px;text-align: center;"><br>
+        </div >
+        <div class="form-group">
+            <label  style="margin-top:5%;">Photo:</label><br>
+            <input type="file"  id="file" name = "file"  class="custom-file-input"><br>
+        </div>
+        <div class="form-group">
+            <button type="submit" name="save" class="btn btn-success" value="Update profile" style="margin-top:8%;background-color:#347ab6;color:white;width: 400px; height:50px;border-style: none;border-radius: 25px;">Update profile</button>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>
